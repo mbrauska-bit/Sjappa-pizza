@@ -1,0 +1,27 @@
+<%- include('partials/header') %>
+<body>
+    <h1>Registrer burger</h1>
+
+    <form action="/registerB-food" method="post">
+        <label for="bildeurl">Bilde-URL</label>
+        <input type="text" id="bildeurl" name="bildeurl">
+
+        <label for="tittel">Tittel</label>
+        <input type="text" id="tittel" name="tittel">
+
+        <label for="beskrivelse">Beskrivelse</label>
+        <input type="text" id="beskrivelse" name="beskrivelse">
+
+        <label for="ingridienser">Ingredienser</label>
+        <input type="text" id="ingridienser" name="ingridienser">
+
+        <label for="kategori">Kategori</label>
+        <input type="text" id="kategori" name="kategori">
+
+        <label for="pris">Pris</label>
+        <input type="number" id="pris" name="pris" step="0.01">
+
+        <button type="submit">Registrer mat</button>
+    </form>
+</body>
+</html>

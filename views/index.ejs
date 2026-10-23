@@ -1,0 +1,20 @@
+<%- include('partials/header') %>
+<body>
+    <h1>Free pizzas from sjappa</h1>
+    <div class="food">
+        <% food.forEach((item) => { %>
+            <article>
+                <img src="<%= item.bildeurl %>" alt="<%= item.tittel %>">
+                <h2><%= item.tittel %></h2>
+                <p><%= item.beskrivelse %></p>
+                <p>Ingredienser: <%= item.ingridienser %></p>
+                <p>Kategori: <%= item.kategori %></p>
+                <p>Pris: <%= item.pris %> kr</p>
+            </article>
+        <% }); %>
+        <% if (food.length === 0) { %>
+            <p>Ingen mat er registrert ennå.</p>
+        <% } %>
+    </div>
+</body>
+
