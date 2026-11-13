@@ -1,0 +1,12 @@
+<%- include('partials/head') %>
+<body>
+    <%- include('partials/nav') %>
+    <h1>Resett passord?</h1>
+    <form action="/reset-password" method="post">
+        <label for="password">Passord</label>
+        <input type="password" name="password" id="password" required>
+        <label for="repeatPassword">Gjenta passord</label>
+        <input type="password" name="repeatPassword" id="repeatPassword" required>
+        <button type="submit">Resett passord</button>
+    </form>
+</body>
