@@ -64,6 +64,9 @@ app.post("/forgot-password",async(req,res)=>{
 const{email}=req.body
 
 const user = await User.findOne({email});
+if (!user) {
+  return res.send("Hvis brukeren finnes, sender vi en e-post.");
+}
 
 console.log(user);
 if(user){
@@ -71,23 +74,26 @@ if(user){
     host: 'smtp.ethereal.email',
     port: 587,
     auth: {
-        user: 'renee.volkman91@ethereal.email',
-        pass: 'ee3u2eKTMYvFKGGH5v'
+        user: 'troy.towne@ethereal.email',
+        pass: '1cs8zU2KBNCTpAYTmK'
     }
     
 });
 
 const jwtEmail = jwt.sign({email: user.email},process.env.SECRET_JWT);
-await transporter.sendMail({
-   from: '"Example Team" <team@example.com>', // sender address
-    to: "alice@example.com, bob@example.com", // list of recipients
-    subject: "Glemt passord", // subject line
-    text: "Her er din nye reset passord lenke", // plain text body
-      html: `<p>Her er din nye reset passord lenke
-      <a href="http://localhost:4000/reset-password?email:${}`
-})
+const resetUrl = `http://localhost:${process.env.PORT}/reset-password?email=${encodeURIComponent(jwtEmail)}`;
+const info = await transporter.sendMail({
+  from: '"Example Team" <team@example.com>',
+  to: user.email,
+  subject: "Glemt passord",
+  text: `Her er din nye reset passord lenke: ${resetUrl}`,
+  html: `<p>Her er din nye reset passord lenke: <a href="${resetUrl}">Tilbakestill passord</a></p>`,
+});
+console.log("Se e-posten:", nodemailer.getTestMessageUrl(info));
+res.send("E-posten er sendt til Ethereal.");
+
 }
-})
+});
 app.post("/reset-password",async(req,res)=>{
    const {password,repeatPassword}=req.body;
 })
@@ -98,10 +104,10 @@ app.post("/login", async (req, res) => {
   console.log(user);
  
   if (!user) {
-    res.status(404).send("bruker eksisterer ikke");
+    return res.status(404).send("bruker eksisterer ikke");
   }
  
-  let isPassword = argon2.verify(user.password, password);
+  const isPassword = await argon2.verify(user.password, password);
   if (isPassword) {
     const token = jwt.sign({ userId: user._id }, process.env.SECRET_JWT);
     console.log("token:", token);
